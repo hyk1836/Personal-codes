@@ -100,51 +100,8 @@ plot(med.out)
 
 # 4. SOBEL TEST TO ACQUIRE P-VALUE
 
-sobel_test_gam <- function(med.fit, out.fit,
-                           treat_name = "tem",
-                           mediator_name = "PM25_mean") {
-  sm1 <- summary(med.fit)
-  sm2 <- summary(out.fit)
-  
-  # 경로 a: treat -> mediator (선형/가우시안 GAM의 parametric 계수)
-  a  <- sm1$p.table[treat_name, "Estimate"]
-  sa <- sm1$p.table[treat_name, "Std. Error"]
-  
-  # 경로 b: mediator -> outcome (treat 등 공변량 포함, 포아송-로그링크 GAM의 parametric 계수)
-  b  <- sm2$p.table[mediator_name, "Estimate"]
-  sb <- sm2$p.table[mediator_name, "Std. Error"]
-  
-  # 간접효과(로그 스케일): ab
-  ab <- a * b
-  
-  # 델타 방법 표준오차
-  se_ab <- sqrt((b^2) * (sa^2) + (a^2) * (sb^2))
-  
-  # Sobel z, p, 95% CI (정규근사)
-  z  <- ab / se_ab
-  p  <- 2 * pnorm(abs(z), lower.tail = FALSE)
-  ci_low  <- ab - 1.96 * se_ab
-  ci_high <- ab + 1.96 * se_ab
-  
-  # 포아송(로그 링크) 해석을 위한 RR 스케일 변환 (간접효과에 해당하는 상대위험)
-  RR_med      <- exp(ab)
-  RR_med_low  <- exp(ci_low)
-  RR_med_high <- exp(ci_high)
-  
-  out <- data.frame(
-    a, sa, b, sb,
-    ind_effect_log = ab,
-    se_ind_effect_log = se_ab,
-    z, p,
-    ci_low_log = ci_low,
-    ci_high_log = ci_high,
-    RR_med, RR_med_low, RR_med_high,
-    row.names = "Sobel"
-  )
-  return(out)
-}
-
 # 5. CONDUCT META-ANALYSIS TO OBTAIN POOLED ESTIMATES
 
 # 6. ESTIMATE ATTRIBUTABLE FRACTION (AF)
+
 

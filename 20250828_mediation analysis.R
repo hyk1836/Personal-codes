@@ -144,18 +144,7 @@ sobel_test_gam <- function(med.fit, out.fit,
   return(out)
 }
 
-## 사용 예시 (질문에서 주신 적합 객체)
-# med.fit <- gam(PM25_mean ~ tem + s(ddd, k = 7*10) + hum,
-#                family = gaussian(), data = seoul_over)
-# out.fit <- gam(TOT_nonacc ~ PM25_mean + tem + DOW + s(ddd, k = 7*10) + hum,
-#                family = poisson(), data = seoul_over)
-
-set.seed(1)
-sobel_res <- sobel_test_gam(med.fit, out.fit,
-                            treat_name = "tem",
-                            mediator_name = "PM25_mean")
-print(sobel_res)
-
 # 5. CONDUCT META-ANALYSIS TO OBTAIN POOLED ESTIMATES
 
 # 6. ESTIMATE ATTRIBUTABLE FRACTION (AF)
+
